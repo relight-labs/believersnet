@@ -1,0 +1,36 @@
+name: continuous integration - believersnet-1
+
+concurrency:
+  group: believersnet-1
+  cancel-in-progress: true
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["*"]
+    paths: ["./apps/believersnet"]
+
+jobs:
+  continuous-integration:
+    name: continuous integration
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: setup node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: install dependencies
+        run: npm install
+        working-directory: ./apps/believersnet
+
+      - name: build
+        run: npm run build
+        working-directory: ./apps/believersnet
+
+      - name: test
+        run: npm test
+        working-directory: ./apps/believersnet
